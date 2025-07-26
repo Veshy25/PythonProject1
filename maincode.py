@@ -34,7 +34,7 @@ file_path = "marketing_campaign.csv"
 df = pd.read_csv(file_path, sep=';')
 
 #===========================================================================
-## 2) Basic Data Exploration, Visualization & Data Cleaning 
+## 2) Basic Data Exploration, Visualization & Basic Data Cleaning 
 #===========================================================================
 
 # View First 5 Rows of Dataset 
@@ -119,6 +119,10 @@ plt.tight_layout()
 plt.suptitle("📋 Count of Categorical Features (Excl. Dt_Customer)", fontsize=16, y=1.02)
 plt.show()
 
+#===========================================================================
+## 3) Data Cleaning & Data Transformation
+#===========================================================================
+
 # 'YOLO', 'Alone', and 'Absurd' are likely non-serious or inconsistent entries,
 # so we'll group them under 'Single' for meaningful analysis.
 print("🔍 Unique values in 'Marital_Status':")
@@ -140,3 +144,6 @@ print(df_cleaned['Marital_Status'].unique())
 
 print("\n📊 Value counts in 'Marital_Status' after replacement:")
 print(df_cleaned['Marital_Status'].value_counts())
+
+# Convert 'Dt_Customer' to datetime format
+df_cleaned['Dt_Customer'] = pd.to_datetime(df_cleaned['Dt_Customer'], format='%Y-%m-%d')
