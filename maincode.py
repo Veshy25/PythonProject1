@@ -1,6 +1,8 @@
 ###PythonProject1, Analysing Marketing Campaign Data
 
+#==========================================================================
 ## 1)Importing and Installing Required Libraries
+#==========================================================================
 # Import Libraries 
 import subprocess
 import sys
@@ -31,31 +33,47 @@ sns.set_style(seaborn_style)
 file_path = "marketing_campaign.csv"
 df = pd.read_csv(file_path, sep=';')
 
-## 2) Basic Data Exploration and Visualization
-print("🔍 First 5 rows of the dataset:\n")   #View First 5 Rows of Dataset 
+#===========================================================================
+## 2) Basic Data Exploration, Visualization & Data Cleaning 
+#===========================================================================
+
+# View First 5 Rows of Dataset 
+print("🔍 First 5 rows of the dataset:\n")                               
 print(df.head())
 
-print("\n📊 Dataset Info:\n")                # 
+# Get Dataset Info
+print("\n📊 Dataset Info:\n")                                           
 print(df.info())
 
-print("\n❓ Missing Values:\n")              # Check for Missing Values 
+# Check for Missing Values
+print("\n❓ Missing Values:\n")                                           
 print(df.isnull().sum())
 
-print("\n📈 Descriptive Statistics:\n")      # Descriptive Statistics
-print(df.describe())
+# Remove the rows where there is at least 1 missing value 
+df_cleaned = df.dropna()
 
-plt.figure(figsize=(12,6))                   # Plot Correlation Heatmap
+# Optional: Check how many rows were removed
+print(f"🧹 Rows before cleaning: {df.shape[0]}")
+print(f"🧼 Rows after cleaning:  {df_cleaned.shape[0]}")
+
+# Descriptive Statistics
+print("\n📈 Descriptive Statistics:\n")                                  
+print(df_cleaned.describe())
+
+# Plot Correlation Heatmap
+plt.figure(figsize=(12,6))                                                
 plt.title('Correlation Heatmap of Marketing Campaign Data')
-sns.heatmap(df.corr(numeric_only=True), annot=True, cmap='coolwarm', fmt='.2f')
+sns.heatmap(df_cleaned.corr(numeric_only=True), annot=True, cmap='coolwarm', fmt='.2f')
 plt.show()
 
-# Get numeric columns                        # Plot Distribution of Numerical Features
-numerical_cols = df.select_dtypes(include=['int64', 'float64']).columns
+# Plot Distribution of Numerical Features
+# Get Numerical Columns 
+numerical_cols = df_cleaned.select_dtypes(include=['int64', 'float64']).columns   
 
 # Filter out binary columns and 'ID'
 numeric_cols_filtered = [
     col for col in numerical_cols 
-    if df[col].nunique() > 2 and col.lower() != 'id'
+    if df_cleaned[col].nunique() > 2 and col.lower() != 'id'
 ]
 
 # Set up subplot grid
@@ -68,7 +86,7 @@ plt.figure(figsize=(cols * 5, rows * 4))
 
 for i, col in enumerate(numeric_cols_filtered, 1):
     plt.subplot(rows, cols, i)
-    sns.histplot(df[col], kde=True, bins=30)
+    sns.histplot(df_cleaned[col], kde=True, bins=30)
     plt.title(f"{col}")
     plt.xlabel("")
     plt.ylabel("")
@@ -76,3 +94,49 @@ for i, col in enumerate(numeric_cols_filtered, 1):
 plt.tight_layout()
 plt.suptitle("📊 Distribution of Numerical Features (Excluding Binary & ID)", fontsize=16, y=1.02)
 plt.show()
+
+# Plot Categorical Columns 
+# Identify Categorical Columns (excluding 'Dt_Customer')
+categorical_cols = [col for col in df_cleaned.select_dtypes(include='object').columns if col != 'Dt_Customer']
+
+# Set up subplot grid layout
+num_cols = len(categorical_cols)
+cols = 2  # Number of columns in the grid
+rows = math.ceil(num_cols / cols)
+
+plt.figure(figsize=(cols * 5, rows * 4))
+
+# Plot Count of Each Categorical Column
+for i, col in enumerate(categorical_cols, 1):
+    plt.subplot(rows, cols, i)
+    sns.countplot(data=df_cleaned, x=col, order=df_cleaned[col].value_counts().index)
+    plt.title(f"{col}")
+    plt.xticks(rotation=45)
+    plt.xlabel("")
+    plt.ylabel("")
+
+plt.tight_layout()
+plt.suptitle("📋 Count of Categorical Features (Excl. Dt_Customer)", fontsize=16, y=1.02)
+plt.show()
+
+# 'YOLO', 'Alone', and 'Absurd' are likely non-serious or inconsistent entries,
+# so we'll group them under 'Single' for meaningful analysis.
+print("🔍 Unique values in 'Marital_Status':")
+print(df_cleaned['Marital_Status'].unique())
+
+print("\n📊 Value counts in 'Marital_Status':")      
+print(df_cleaned['Marital_Status'].value_counts())   
+
+# Replace unusual values with 'Single'
+df_cleaned.loc[:, 'Marital_Status'] = df_cleaned['Marital_Status'].replace({
+    'YOLO': 'Single',
+    'Absurd': 'Single',
+    'Alone': 'Single'
+})
+
+# Verify the replacement
+print("🔎 Unique values in 'Marital_Status' after replacement:")
+print(df_cleaned['Marital_Status'].unique())
+
+print("\n📊 Value counts in 'Marital_Status' after replacement:")
+print(df_cleaned['Marital_Status'].value_counts())
