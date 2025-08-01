@@ -123,6 +123,10 @@ plt.show()
 ## 3) Data Cleaning & Data Transformation
 #===========================================================================
 
+# Check how many duplicate rows exist
+num_duplicates = df_cleaned.duplicated().sum()
+print(f"🔍 Number of duplicate rows in the dataset: {num_duplicates}")  # No Duplicates , No Further updates needed
+
 # 'YOLO', 'Alone', and 'Absurd' are likely non-serious or inconsistent entries,
 # so we'll group them under 'Single' for meaningful analysis.
 print("🔍 Unique values in 'Marital_Status':")
