@@ -157,3 +157,50 @@ print(df_cleaned['Dt_Customer'].head())
 # Convert 'Dt_Customer' to datetime format from object string type
 df_cleaned.loc[:, 'Dt_Customer'] = pd.to_datetime(df_cleaned['Dt_Customer'], format='%Y-%m-%d')
 
+# Total Campaigns Accepted Transformation
+# Creating a new column to sum the accepted campaigns 
+df_cleaned.loc[:, 'Total_Campaigns_Accepted'] = df_cleaned[[
+    'AcceptedCmp1', 'AcceptedCmp2', 'AcceptedCmp3', 
+    'AcceptedCmp4', 'AcceptedCmp5', 'Response'
+]].sum(axis=1)
+
+# Age Group Transformation
+## Create Age column
+df_cleaned.loc[:, 'Age'] = 2025 - df_cleaned['Year_Birth']
+
+# Create Age Group column using pd.cut
+df_cleaned.loc[:, 'Age_Group'] = pd.cut(df_cleaned['Age'],
+                                        bins=[0, 30, 45, 60, 100],
+                                        labels=['Young', 'Adult', 'Middle-Aged', 'Senior'])
+
+
+#===========================================================================
+## NO ?) Data Analysis 
+#===========================================================================
+
+# Compare Total Purchases by Channel 
+channel_cols = ['NumWebPurchases', 'NumCatalogPurchases', 'NumStorePurchases']
+df_cleaned[channel_cols].sum().sort_values(ascending=False).plot(kind='bar')
+plt.title("Total Purchases by Marketing Channel")
+plt.ylabel("Number of Purchases")
+plt.show()
+
+# Caimpaign Acceptance vs Channel usage - Check if people who accepted campaigns tend to use certain channels more. 
+
+
+
+# Create a mask for customers who accepted at least one campaign
+responders = df_cleaned[df_cleaned['Total_Campaigns_Accepted'] > 0]
+
+# Average purchases per channel by responders
+responders[channel_cols].mean().plot(kind='bar', color='green')
+plt.title("Average Channel Purchases for Campaign Responders")
+plt.ylabel("Average Purchases")
+plt.show()
+
+# Cross-tab by Age - Which channel works better for which demographic? 
+# Average web purchases by age group
+df_cleaned.groupby('Age_Group')['NumWebPurchases'].mean().plot(kind='bar')
+plt.title("Avg Web Purchases by Age Group")
+plt.ylabel("Average")
+plt.show()
