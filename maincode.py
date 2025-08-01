@@ -145,5 +145,11 @@ print(df_cleaned['Marital_Status'].unique())
 print("\n📊 Value counts in 'Marital_Status' after replacement:")
 print(df_cleaned['Marital_Status'].value_counts())
 
-# Convert 'Dt_Customer' to datetime format
-df_cleaned['Dt_Customer'] = pd.to_datetime(df_cleaned['Dt_Customer'], format='%Y-%m-%d')
+# Check data type of 'Dt_Customer' and a few of its values 
+print("\n🔍 Data type of 'Dt_Customer':")
+print(df_cleaned['Dt_Customer'].dtype)
+print(df_cleaned['Dt_Customer'].head())
+
+# Convert 'Dt_Customer' to datetime format from object string type
+df_cleaned.loc[:, 'Dt_Customer'] = pd.to_datetime(df_cleaned['Dt_Customer'], format='%Y-%m-%d')
+
