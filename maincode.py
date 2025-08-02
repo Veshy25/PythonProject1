@@ -25,6 +25,9 @@ import pandas as pd
 from scipy import stats
 from sklearn.preprocessing import StandardScaler
 import math
+from sklearn.linear_model import LogisticRegression 
+from sklearn.preprocessing import StandardScaler
+
 
 # Apply seaborn style
 sns.set_style(seaborn_style)
@@ -145,7 +148,6 @@ df_cleaned.loc[:, 'Marital_Status'] = df_cleaned['Marital_Status'].replace({
 # Verify the replacement
 print("🔎 Unique values in 'Marital_Status' after replacement:")
 print(df_cleaned['Marital_Status'].unique())
-
 print("\n📊 Value counts in 'Marital_Status' after replacement:")
 print(df_cleaned['Marital_Status'].value_counts())
 
@@ -153,9 +155,9 @@ print(df_cleaned['Marital_Status'].value_counts())
 print("\n🔍 Data type of 'Dt_Customer':")
 print(df_cleaned['Dt_Customer'].dtype)
 print(df_cleaned['Dt_Customer'].head())
-
 # Convert 'Dt_Customer' to datetime format from object string type
-df_cleaned.loc[:, 'Dt_Customer'] = pd.to_datetime(df_cleaned['Dt_Customer'], format='%Y-%m-%d')
+df_cleaned.loc[:, 'Dt_Customer'] = pd.to_datetime(df_cleaned['Dt_Customer'], errors='coerce')
+
 
 # Total Campaigns Accepted Transformation
 # Creating a new column to sum the accepted campaigns 
@@ -167,11 +169,11 @@ df_cleaned.loc[:, 'Total_Campaigns_Accepted'] = df_cleaned[[
 # Age Group Transformation
 ## Create Age column
 df_cleaned.loc[:, 'Age'] = 2025 - df_cleaned['Year_Birth']
-
 # Create Age Group column using pd.cut
 df_cleaned.loc[:, 'Age_Group'] = pd.cut(df_cleaned['Age'],
                                         bins=[0, 30, 45, 60, 100],
                                         labels=['Young', 'Adult', 'Middle-Aged', 'Senior'])
+
 
 
 #===========================================================================
@@ -186,9 +188,6 @@ plt.ylabel("Number of Purchases")
 plt.show()
 
 # Caimpaign Acceptance vs Channel usage - Check if people who accepted campaigns tend to use certain channels more. 
-
-
-
 # Create a mask for customers who accepted at least one campaign
 responders = df_cleaned[df_cleaned['Total_Campaigns_Accepted'] > 0]
 
