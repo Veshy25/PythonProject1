@@ -7,11 +7,11 @@
 import subprocess
 import sys
 
-# List of packages to install
-packages = ['pandas', 'numpy', 'matplotlib', 'seaborn', 'scipy', 'scikit-learn']
-
-# Loop through and install each
-for package in packages:
+# List of packages to install  
+packages = ['pandas', 'numpy', 'matplotlib', 'seaborn', 'scipy', 'scikit-learn', 'statsmodels']  
+  
+# Loop through and install each  
+for package in packages:  
     subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
 # Set Visualization Style 
@@ -27,6 +27,7 @@ from sklearn.preprocessing import StandardScaler
 import math
 from sklearn.linear_model import LogisticRegression 
 from sklearn.preprocessing import StandardScaler
+import statsmodels.api as sm
 
 
 # Apply seaborn style
@@ -177,7 +178,7 @@ df_cleaned.loc[:, 'Age_Group'] = pd.cut(df_cleaned['Age'],
 
 
 #===========================================================================
-## NO ?) Data Analysis 
+## 4) Preliminary Analysis and visualisation
 #===========================================================================
 
 # Compare Total Purchases by Channel 
@@ -202,4 +203,44 @@ plt.show()
 df_cleaned.groupby('Age_Group')['NumWebPurchases'].mean().plot(kind='bar')
 plt.title("Avg Web Purchases by Age Group")
 plt.ylabel("Average")
+plt.show()
+
+# ===========================================================================  
+## 4) Logistic Regression: Which Channel Predicts Campaign Response : Question 3 
+# ===========================================================================
+
+# Create a binary column : 1 if accepted any campaign, 0 otherwise
+df_cleaned['Responded'] = (df_cleaned['Total_Campaigns_Accepted'] > 0).astype(int)
+
+# Select Features (x) and Target (y)
+X = df_cleaned[channel_cols]  # already defined as ['NumWebPurchases', 'NumCatalogPurchases', 'NumStorePurchases']
+y = df_cleaned['Responded']
+
+# Standardize the features for interpretability
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# Add intercept to the features 
+X_const = sm.add_constant(X_scaled)
+
+# Fit the logistic regression model
+logit_model = sm.Logit(y, X_const)
+result = logit_model.fit()
+
+# Print detailed summary of the model
+print(result.summary())
+
+# Visualize the influence of each channel on campaign response
+# Create a DataFrame for coefficients (excluding intercept)
+coef_df = pd.DataFrame({
+    'Channel': channel_cols,
+    'Coefficient': result.params[1:]  # skip intercept
+})
+
+# Plot
+plt.figure(figsize=(6, 3))
+sns.barplot(data=coef_df, x='Coefficient', y='Channel', palette='coolwarm')
+plt.axvline(0, color='black', linestyle='--')
+plt.title("Channel Influence on Campaign Acceptance")
+plt.tight_layout()
 plt.show()
