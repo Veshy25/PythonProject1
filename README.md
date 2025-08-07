@@ -7,7 +7,7 @@ In this personal project, I explore a real-world marketing campaign dataset usin
 
 Some Questions that this Data Analysis aims to answer from the data set of marketing_campaign: 
 1) What product categories are most popular ? 
-2) Which customer segments are more responsive to each of these individual marketing campaigns ?  
+2) Which customer segments are more likely to respond positively to marketing campaigns ? 
 3) Which marketing channel is most effective in reaching our customers ?
 4) ...
 
