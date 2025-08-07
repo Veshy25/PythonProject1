@@ -262,11 +262,58 @@ plt.title("Avg Web Purchases by Age Group")
 plt.ylabel("Average")
 plt.show()
 
+# Define product columns
+product_cols = [
+    'MntWines', 'MntFruits', 'MntMeatProducts',
+    'MntFishProducts', 'MntSweetProducts', 'MntGoldProds'
+]
 
+# ===========================================================================  
+## 5) What product categories are most popular ? : Question 1 
+# ===========================================================================
 
+# Calculate % of customers who purchased each product (non-zero spend) 
+## This Reflects the *reach* - how widely each product category is adopted 
+popular_counts = (df_cleaned[product_cols] > 0).sum().sort_values(ascending=False)
 
+# Calcuate average spend per customer per category
+## This reflects the *depth* - how much customers typically spend on each category
+avg_spend = df_cleaned[product_cols].mean().sort_values(ascending=False)
 
+# Combine both metrics into single data frame for a fairer story
+combined = pd.DataFrame({
+    '% Customers': popular_counts / len(df_cleaned),
+    'Avg Spend': avg_spend
+})
 
+# Normalize the two columns to 0–1 scale
+## This is necessary to fairly combine reach and spend into a score 
+combined['% Customers (Norm)'] = combined['% Customers'] / combined['% Customers'].max()
+combined['Avg Spend (Norm)'] = combined['Avg Spend'] / combined['Avg Spend'].max()
+
+# Create a composite popularity score (equal weighting)
+## 50% weight of % of customers (reach) and 50% to average spend (depth)
+combined['Popularity Score'] = 0.5 * combined['% Customers (Norm)'] + 0.5 * combined['Avg Spend (Norm)']
+
+# Sort by the final score
+combined_sorted = combined.sort_values(by='Popularity Score', ascending=False)
+
+# Round values for cleaner display and display table 
+display_table = combined_sorted[['% Customers', 'Avg Spend', 'Popularity Score']].round(3)
+print(display_table)
+
+# Plot popularity scores
+plt.figure(figsize=(10, 6))
+sns.barplot(
+    x=display_table['Popularity Score'],
+    y=display_table.index,
+    palette='Blues_d'
+)
+plt.title('Product Category Popularity (Composite Score)')
+plt.xlabel('Popularity Score')
+plt.ylabel('Product Category')
+plt.tight_layout()
+plt.show()
 
 
 # ===========================================================================  
