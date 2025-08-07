@@ -308,3 +308,7 @@ plt.axvline(0, color='black', linestyle='--')
 plt.title("Channel Influence on Campaign Acceptance")
 plt.tight_layout()
 plt.show()
+
+# Print ranked influence of channels
+print("📊 Channel Influence on Campaign Response (by Coefficient):")
+print(coef_df.sort_values(by="Coefficient", ascending=False))
