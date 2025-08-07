@@ -152,6 +152,63 @@ print(df_cleaned['Marital_Status'].unique())
 print("\n📊 Value counts in 'Marital_Status' after replacement:")
 print(df_cleaned['Marital_Status'].value_counts())
 
+# Check for Outliers through Visualization
+# Columns to visualize and detect outliers
+num_vars = [
+    'Income','Year_Birth', 'Kidhome', 'Teenhome', 'Recency', 
+    'MntWines', 'MntFruits', 'MntMeatProducts', 'MntFishProducts', 
+    'MntSweetProducts', 'MntGoldProds', 'NumDealsPurchases', 
+    'NumWebPurchases', 'NumCatalogPurchases', 'NumStorePurchases', 
+    'NumWebVisitsMonth'
+]
+
+# Visualize outliers using boxplots
+plt.figure(figsize=(18, 20))
+
+for i, col in enumerate(num_vars, 1):
+    plt.subplot(4, 4, i)
+    sns.boxplot(y=df_cleaned[col], color='skyblue')
+    plt.title(col)
+    plt.xlabel("")  # Optional: clean layout
+
+plt.tight_layout()
+plt.suptitle("📦 Boxplots for Outlier Detection", fontsize=18, y=1.02)
+plt.show()
+
+# Removing outliers from Income using IQR
+Q1 = df_cleaned['Income'].quantile(0.25)
+Q3 = df_cleaned['Income'].quantile(0.75)
+IQR = Q3 - Q1
+lower_bound = Q1 - 1.5 * IQR
+upper_bound = Q3 + 1.5 * IQR
+df_cleaned = df_cleaned[(df_cleaned['Income'] >= lower_bound) & (df_cleaned['Income'] <= upper_bound)]
+
+# Optional: Check new Income distribution
+plt.figure(figsize=(4, 4))
+sns.boxplot(y=df_cleaned['Income'], color='skyblue')
+plt.title("Income After Outlier Removal")
+plt.tight_layout()
+plt.show()
+
+# Removing outliers from Year_Birth using IQR
+Q1 = df_cleaned['Year_Birth'].quantile(0.25)
+Q3 = df_cleaned['Year_Birth'].quantile(0.75)
+IQR = Q3 - Q1
+lower_bound = Q1 - 1.5 * IQR
+upper_bound = Q3 + 1.5 * IQR
+df_cleaned = df_cleaned[(df_cleaned['Year_Birth'] >= lower_bound) & (df_cleaned['Year_Birth'] <= upper_bound)]
+
+# Optional: Check new Year_Birth distribution
+plt.figure(figsize=(4, 4))
+sns.boxplot(y=df_cleaned['Year_Birth'], color='skyblue')
+plt.title("Year_Birth After Outlier Removal")
+plt.tight_layout()
+plt.show()
+
+# Print confirmation
+print(f"✅ Shape of dataset after removing outliers in 'Income' and 'Year_Birth': {df_cleaned.shape}")
+
+
 # Check data type of 'Dt_Customer' and a few of its values 
 print("\n🔍 Data type of 'Dt_Customer':")
 print(df_cleaned['Dt_Customer'].dtype)
@@ -205,8 +262,15 @@ plt.title("Avg Web Purchases by Age Group")
 plt.ylabel("Average")
 plt.show()
 
+
+
+
+
+
+
+
 # ===========================================================================  
-## 4) Logistic Regression: Which Channel Predicts Campaign Response : Question 3 
+## 7) Logistic Regression: Which Channel Predicts Campaign Response : Question 3 
 # ===========================================================================
 
 # Create a binary column : 1 if accepted any campaign, 0 otherwise
