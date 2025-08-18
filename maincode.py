@@ -232,7 +232,8 @@ df_cleaned.loc[:, 'Age_Group'] = pd.cut(df_cleaned['Age'],
                                         bins=[0, 30, 45, 60, 100],
                                         labels=['Young', 'Adult', 'Middle-Aged', 'Senior'])
 
-
+# Create a binary column : 1 if accepted any campaign, 0 otherwise
+df_cleaned['Responded'] = (df_cleaned['Total_Campaigns_Accepted'] > 0).astype(int)
 
 #===========================================================================
 ## 4) Preliminary Analysis and visualisation
@@ -315,13 +316,59 @@ plt.ylabel('Product Category')
 plt.tight_layout()
 plt.show()
 
+# ===========================================================================  
+## 6) Which Customer Segments are most likely to respond to campaigns? : Question 2 
+# ===========================================================================
+
+#Response rate by Age Group 
+response_by_age = df_cleaned.groupby('Age_Group')['Responded'].mean().sort_values(ascending=False)
+
+plt.figure(figsize=(6,4))
+sns.barplot(x=response_by_age.index, y=response_by_age.values, palette="viridis")
+plt.title("📊 Campaign Response Rate by Age Group")
+plt.ylabel("Response Rate")
+plt.xlabel("Age Group")
+plt.ylim(0, 1)
+plt.show()
+
+print("✅ Response Rate by Age Group:")
+print(response_by_age.round(3))
+
+# Response Rate by Education Level 
+response_by_edu = df_cleaned.groupby('Education')['Responded'].mean().sort_values(ascending=False)
+
+plt.figure(figsize=(6,4))
+sns.barplot(x=response_by_edu.index, y=response_by_edu.values, palette="magma")
+plt.title("📊 Campaign Response Rate by Education Level")
+plt.ylabel("Response Rate")
+plt.xlabel("Education Level")
+plt.xticks(rotation=30)
+plt.ylim(0, 1)
+plt.show()
+
+print("\n✅ Response Rate by Education:")
+print(response_by_edu.round(3))
+
+# Response Rate by Marital Status
+response_by_marital = df_cleaned.groupby('Marital_Status')['Responded'].mean().sort_values(ascending=False)
+
+plt.figure(figsize=(6,4))
+sns.barplot(x=response_by_marital.index, y=response_by_marital.values, palette="cubehelix")
+plt.title("📊 Campaign Response Rate by Marital Status")
+plt.ylabel("Response Rate")
+plt.xlabel("Marital Status")
+plt.xticks(rotation=30)
+plt.ylim(0, 1)
+plt.show()
+
+print("\n✅ Response Rate by Marital Status:")
+print(response_by_marital.round(3))
+
+
 
 # ===========================================================================  
 ## 7) Logistic Regression: Which Channel Predicts Campaign Response : Question 3 
 # ===========================================================================
-
-# Create a binary column : 1 if accepted any campaign, 0 otherwise
-df_cleaned['Responded'] = (df_cleaned['Total_Campaigns_Accepted'] > 0).astype(int)
 
 # Select Features (x) and Target (y)
 X = df_cleaned[channel_cols]  # already defined as ['NumWebPurchases', 'NumCatalogPurchases', 'NumStorePurchases']
