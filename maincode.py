@@ -26,7 +26,6 @@ from scipy import stats
 from sklearn.preprocessing import StandardScaler
 import math
 from sklearn.linear_model import LogisticRegression 
-from sklearn.preprocessing import StandardScaler
 import statsmodels.api as sm
 
 
