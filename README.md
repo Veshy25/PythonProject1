@@ -24,3 +24,5 @@ This python project will follow the following outline:
 ========================================================================================================================================================================================
 
 Conclusion
+Through running the Python Codes, I was able to get insights on answering the required question using the marketing campaign dataset. 
+1) The most popular product category is 
