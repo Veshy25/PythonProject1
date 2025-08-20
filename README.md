@@ -16,5 +16,6 @@ This python project will follow the following outline:
 2. Basic Data Exploration & Visualization
 3. Data Cleaning & Data Transformation
 4. Preliminary Analysis & Visualization
-5. ...
-6. ... 
+5. Question 1: What product categories are most popular ? 
+6. Question 2: Which customer segments are most likely to respond to campaign ?
+7.  
