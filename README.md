@@ -26,4 +26,4 @@ This python project will follow the following outline:
 Conclusion:
 
 Through running the Python Codes, I was able to get insights on answering the required question using the marketing campaign dataset. 
-1) The most popular product category is 
+1) The most popular product category is Wines, having a 99.4% of the customers have purchased Wine from the store with an average spend of $306.17. This would make wines the flagship product which drives the revenue for the grocery store. The second most popular product categoy is Meat products where 100% of the customers have purchased meat with an average moderate spend of $165, which shows meats is a stable and esstential product within the grocery store. 
