@@ -19,3 +19,8 @@ This python project will follow the following outline:
 5. Question 1: What product categories are most popular ? 
 6. Question 2: Which customer segments are most likely to respond to campaign ?
 7. Question 3: Logistics Regression: Which Channel predicts campign response ?  
+
+
+==============================================================================================================================================================================================================================================================================================================================================================================================================================================
+
+Conclusion
