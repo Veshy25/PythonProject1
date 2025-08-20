@@ -27,6 +27,8 @@ from sklearn.preprocessing import StandardScaler
 import math
 from sklearn.linear_model import LogisticRegression 
 import statsmodels.api as sm
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report, confusion_matrix, roc_auc_score, roc_curve
 
 
 # Apply seaborn style
@@ -377,15 +379,46 @@ y = df_cleaned['Responded']
 scaler = StandardScaler()
 X_scaled = scaler.fit_transform(X)
 
-# Add intercept to the features 
-X_const = sm.add_constant(X_scaled)
+# Train-test split (70% train / 30% test)
+X_train, X_test, y_train, y_test = train_test_split(
+    X_scaled, y, test_size=0.3, random_state=42, stratify=y
+)
 
-# Fit the logistic regression model
-logit_model = sm.Logit(y, X_const)
+# Add intercept to the features 
+X_train_const = sm.add_constant(X_train)
+X_test_const = sm.add_constant(X_test)
+
+# Fit the logistic regression model on train data
+logit_model = sm.Logit(y_train, X_train_const)
 result = logit_model.fit()
 
 # Print detailed summary of the model
 print(result.summary())
+
+# Predict on test set
+y_pred_prob = result.predict(X_test_const)
+y_pred = (y_pred_prob > 0.5).astype(int)
+
+# Evaluate model
+print("\n📊 Confusion Matrix:")
+print(confusion_matrix(y_test, y_pred))
+
+print("\n📊 Classification Report:")
+print(classification_report(y_test, y_pred, digits=3))
+
+auc = roc_auc_score(y_test, y_pred_prob)
+print(f"\n🔎 ROC-AUC Score: {auc:.3f}")
+
+# Plot ROC Curve
+fpr, tpr, thresholds = roc_curve(y_test, y_pred_prob)
+plt.figure(figsize=(6, 4))
+plt.plot(fpr, tpr, label=f"AUC = {auc:.2f}")
+plt.plot([0, 1], [0, 1], linestyle="--", color="gray")
+plt.title("ROC Curve - Campaign Response Prediction")
+plt.xlabel("False Positive Rate")
+plt.ylabel("True Positive Rate")
+plt.legend()
+plt.show()
 
 # Visualize the influence of each channel on campaign response
 # Create a DataFrame for coefficients (excluding intercept)
@@ -394,14 +427,41 @@ coef_df = pd.DataFrame({
     'Coefficient': result.params[1:]  # skip intercept
 })
 
+# Sort channels by coefficient (helps readability)
+coef_df = coef_df.sort_values(by="Coefficient", ascending=False)
+
 # Plot
-plt.figure(figsize=(6, 3))
-sns.barplot(data=coef_df, x='Coefficient', y='Channel', palette='coolwarm')
-plt.axvline(0, color='black', linestyle='--')
-plt.title("Channel Influence on Campaign Acceptance")
+plt.figure(figsize=(7, 4))
+ax = sns.barplot(
+    data=coef_df, 
+    x='Coefficient', 
+    y='Channel', 
+    palette='coolwarm', 
+    edgecolor='black'
+)
+
+# Add vertical line at 0
+plt.axvline(0, color='black', linestyle='--', linewidth=1)
+
+# Add annotations on bars
+for i, (coef, channel) in enumerate(zip(coef_df['Coefficient'], coef_df['Channel'])):
+    ax.text(
+        coef, i, f"{coef:.2f}", 
+        va='center', ha='left' if coef > 0 else 'right', 
+        fontsize=9, color="black", fontweight="bold"
+    )
+
+# Titles and labels
+plt.title("Channel Influence on Campaign Acceptance", fontsize=13, fontweight="bold")
+plt.xlabel("Logistic Regression Coefficient", fontsize=11)
+plt.ylabel("Channel", fontsize=11)
+
+# Clean style
+sns.despine(left=True, bottom=True)
+plt.grid(axis='x', linestyle="--", alpha=0.6)
 plt.tight_layout()
 plt.show()
 
 # Print ranked influence of channels
 print("📊 Channel Influence on Campaign Response (by Coefficient):")
-print(coef_df.sort_values(by="Coefficient", ascending=False))
+print(coef_df)
