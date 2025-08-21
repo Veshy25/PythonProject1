@@ -28,4 +28,6 @@ Conclusion:
 Through running the Python Codes, I was able to get insights on answering the required question using the marketing campaign dataset. 
 1) The most popular product category is Wines with a popularity score of 0.997, having a 99.4% of the customers have purchased Wine from the store with an average spend of $306.17. This would make wines the flagship product which drives the revenue for the grocery store. The second most popular product category is Meat products with a popularity score of 0.77, where 100% of the customers have purchased meat but with average moderate spend of $165, which shows meats is a stable and esstential product within the grocery store. 
 
-2) The customer segment that is most likely to respond to the campaigns, when look
+2) To analyze campaign responsiveness, the entire customer base was segmented in four distinct ways. Each segmentation independently considers the full customer base. Therefore, a customer may belong to one category in one segmentation and simultaneously be included in other categories when viewed through different segmentation lenses.
+   
+When looking at the age group segment, 
