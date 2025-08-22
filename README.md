@@ -36,4 +36,3 @@ Through running the Python Codes, I was able to get insights on answering the re
 
     When looking at marital status segment, Widows have the highest response rate of 33.8% to campaigns
 
-   
