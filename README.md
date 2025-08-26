@@ -30,11 +30,11 @@ Question 1) The most popular product category is Wines with a popularity score o
 
 Question 2) To analyze campaign responsiveness, the entire customer base was segmented in three distinct ways. Each segmentation independently considers the full customer base. Therefore, a customer would belong to one category in one segmentation and simultaneously be included in other categories when viewed through different segmentation lenses.
    
-    When looking at the age group segment, Young People Segment (Ages 0-30) have a response rate of 43% to campaigns followed by Senior People Segment (60-100)    with a response rate of 30% to campaigns. 
+   When looking at the age group segment, Young People Segment (Ages 0-30) have a response rate of 43% to campaigns followed by Senior People Segment (60-100)    with a response rate of 30% to campaigns. 
 
-    When looking at the education level segment, PHD segment have the highest response rate of 33.5% to campaigns 
+   When looking at the education level segment, PHD segment have the highest response rate of 33.5% to campaigns 
 
-    When looking at marital status segment, Widows have the highest response rate of 33.8% to campaigns
+   When looking at marital status segment, Widows have the highest response rate of 33.8% to campaigns
 
 Question 3) 
 
