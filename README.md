@@ -26,6 +26,7 @@ This python project will follow the following outline:
 Conclusion:
 
 Through running the Python Codes, I was able to get insights on answering the required question using the marketing campaign dataset. 
+
 Question 1) The most popular product category is Wines with a popularity score of 0.997, having a 99.4% of the customers have purchased Wine from the store with an average spend of $306.17. This would make wines the flagship product which drives the revenue for the grocery store. The second most popular product category is Meat products with a popularity score of 0.77, where 100% of the customers have purchased meat but with average moderate spend of $165, which shows meats is a stable and esstential product within the grocery store. 
 
 Question 2) To analyze campaign responsiveness, the entire customer base was segmented in three distinct ways. Each segmentation independently considers the full customer base. Therefore, a customer would belong to one category in one segmentation and simultaneously be included in other categories when viewed through different segmentation lenses.
@@ -36,5 +37,5 @@ Question 2) To analyze campaign responsiveness, the entire customer base was seg
 
    When looking at marital status segment, Widows have the highest response rate of 33.8% to campaigns
 
-Question 3) 
+Question 3) The logistic regression results indicate that Catalog Purchases (x2), have the strongest positive influence on campaign response, with a high and statistically significant coeffiency (0.71 < p <0.001 ). This suggests 
 
