@@ -37,5 +37,7 @@ Question 2) To analyze campaign responsiveness, the entire customer base was seg
 
    When looking at marital status segment, Widows have the highest response rate of 33.8% to campaigns
 
-Question 3) The logistic regression results indicate that Catalog Purchases (x2), have the strongest positive influence on campaign response, with a high and statistically significant coeffiency (0.71 < p <0.001 ). This suggests that customers who purchase more frequently through catalogs are substaintially more likely to accept caimpaigns. Web purchases (x1) also shows a positive and significant effect (0.26, p<0.001), though weaker compared to catalogs, indicating some contribution in prediciting responses. On the other hand, 
+Question 3) The logistic regression results indicate that Catalog Purchases (x2), have the strongest positive influence on campaign response, with a high and statistically significant coeffiency (0.71 < p <0.001 ). This suggests that customers who purchase more frequently through catalogs are substaintially more likely to accept caimpaigns. Web purchases (x1) also shows a positive and significant effect (0.26, p<0.001), though weaker compared to catalogs, indicating some contribution in prediciting responses. 
+
+On the other hand, Store Purchases (x3) have a negative and signficant coefficient (-0.19, p=0.013), suggesting customers who purchase more in-store are slightly less likely to respond to caimpaigns.  
 
